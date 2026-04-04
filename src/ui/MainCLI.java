@@ -2,6 +2,7 @@ package ui;
 
 import java.util.Scanner;
 import service.*;
+import dao.*;
 
 public class MainCLI {
 
@@ -10,19 +11,23 @@ public class MainCLI {
         Scanner sc = new Scanner(System.in);
 
         CustomerService cs = new CustomerService();
-        ProductService ps = new ProductService();
-        OrderService os = new OrderService();
+        ProductDAO pd = new ProductDAO();
+        OrderDAO od = new OrderDAO();
 
         while (true) {
-            System.out.println("\n=== Inventory System ===");
+
+            System.out.println("\n==== Inventory System ====");
             System.out.println("1. Add Customer");
             System.out.println("2. View Products");
             System.out.println("3. Place Order");
-            System.out.println("4. Exit");
+            System.out.println("4. View Orders");
+            System.out.println("5. Check Stock");
+            System.out.println("6. Exit");
 
-            int choice = sc.nextInt();
+            int ch = sc.nextInt();
 
-            switch (choice) {
+            switch (ch) {
+
                 case 1:
                     System.out.print("Enter ID: ");
                     int id = sc.nextInt();
@@ -44,7 +49,7 @@ public class MainCLI {
                     break;
 
                 case 2:
-                    ps.viewProducts();
+                    pd.viewProducts();
                     break;
 
                 case 3:
@@ -60,10 +65,20 @@ public class MainCLI {
                     System.out.print("Quantity: ");
                     int qty = sc.nextInt();
 
-                    os.placeOrder(oid, cid, pid, qty);
+                    od.placeOrder(oid, cid, pid, qty);
                     break;
 
                 case 4:
+                    od.viewOrders();
+                    break;
+
+                case 5:
+                    System.out.print("Enter Product ID: ");
+                    int p = sc.nextInt();
+                    pd.checkStock(p);
+                    break;
+
+                case 6:
                     System.exit(0);
             }
         }
