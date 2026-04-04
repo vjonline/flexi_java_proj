@@ -16,7 +16,7 @@ public class CustomerDAO {
             con.prepareStatement("CALL addCustomer(?,?,?,?,?)");
 
         // Using getters from model
-        ps.setInt(1, c.getCustomerID());
+        ps.setInt(1, c.getId());
         ps.setString(2, c.getName());
         ps.setString(3, c.getEmail());
         ps.setString(4, c.getPhone());

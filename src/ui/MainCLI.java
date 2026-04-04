@@ -33,7 +33,7 @@ public class MainCLI {
                     Customer c = new Customer();
 
                     System.out.print("Enter ID: ");
-                    c.setCustomerID(sc.nextInt());
+                    c.setId(sc.nextInt());
                     sc.nextLine();
 
                     System.out.print("Name: ");

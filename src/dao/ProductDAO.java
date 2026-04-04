@@ -5,9 +5,10 @@ import model.Product;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class ProductDAO {
+//Implementing interface (for polymorphism)
+public class ProductDAO implements BaseDAO {
 
-    // ✅ Return ArrayList instead of List
+    //Return ArrayList
     public ArrayList<Product> getAllProducts() {
 
         ArrayList<Product> list = new ArrayList<>();
@@ -22,7 +23,7 @@ public class ProductDAO {
 
                 Product p = new Product();
 
-                // setters (DB → object)
+                // DB → Object (setters)
                 p.setProductID(rs.getInt("ProductID"));
                 p.setName(rs.getString("Name"));
                 p.setCategory(rs.getString("Category"));
@@ -32,14 +33,18 @@ public class ProductDAO {
                 list.add(p);
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } 
+        catch (SQLException e) {
+            System.out.println("Database error while fetching products!");
+        } 
+        catch (Exception e) {
+            System.out.println("Unexpected error!");
         }
 
         return list;
     }
 
-    // ✅ Display products
+    //Display products
     public void viewProducts() {
 
         ArrayList<Product> list = getAllProducts();
@@ -54,7 +59,13 @@ public class ProductDAO {
         }
     }
 
-    // ✅ Check stock
+    //REQUIRED for interface (polymorphism)
+    @Override
+    public void viewAll() {
+        viewProducts();
+    }
+
+    //Check stock using SQL function
     public int checkStock(int pid) {
 
         try {
@@ -71,8 +82,12 @@ public class ProductDAO {
                 return rs.getInt(1);
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } 
+        catch (SQLException e) {
+            System.out.println("Database error while checking stock!");
+        } 
+        catch (Exception e) {
+            System.out.println("Unexpected error!");
         }
 
         return 0;
