@@ -12,14 +12,18 @@ public class MainCLI {
         Scanner sc = new Scanner(System.in);
 
         CustomerService cs = new CustomerService();
-        ProductDAO pd = new ProductDAO();
         OrderDAO od = new OrderDAO();
+
+        //Polymorphism (interface reference)
+        BaseDAO dao = new ProductDAO();  
+
+        ProductDAO pd = new ProductDAO(); // still used for other methods
 
         while (true) {
 
             System.out.println("\n==== Inventory System ====");
             System.out.println("1. Add Customer");
-            System.out.println("2. View Products");
+            System.out.println("2. View Products (Polymorphism)");
             System.out.println("3. Place Order");
             System.out.println("4. View Orders");
             System.out.println("5. Check Stock");
@@ -48,12 +52,12 @@ public class MainCLI {
                     System.out.print("Address: ");
                     c.setAddress(sc.nextLine());
 
-                    cs.addCustomer(c); // pass object
-
+                    cs.addCustomer(c);
                     break;
 
                 case 2:
-                    pd.viewProducts();
+                    //POLYMORPHISM USED HERE
+                    dao.viewAll();  
                     break;
 
                 case 3:
@@ -79,9 +83,11 @@ public class MainCLI {
                 case 5:
                     System.out.print("Enter Product ID: ");
                     int p = sc.nextInt();
-                    pd.checkStock(p);
-                    break;
 
+                    int stock = pd.checkStock(p);
+                    System.out.println("Stock = " + stock);
+
+                    break;
                 case 6:
                     System.exit(0);
             }
