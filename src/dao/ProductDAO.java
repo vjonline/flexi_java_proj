@@ -1,12 +1,17 @@
 package dao;
 
 import db.DBConnection;
+import model.Product;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class ProductDAO {
 
-    // View all products
-    public void viewProducts() {
+    // ✅ Return ArrayList instead of List
+    public ArrayList<Product> getAllProducts() {
+
+        ArrayList<Product> list = new ArrayList<>();
+
         try {
             Connection con = DBConnection.getConnection();
             Statement st = con.createStatement();
@@ -14,20 +19,44 @@ public class ProductDAO {
             ResultSet rs = st.executeQuery("SELECT * FROM Product");
 
             while (rs.next()) {
-                System.out.println(
-                    rs.getInt("ProductID") + " | " +
-                    rs.getString("Name") + " | Stock: " +
-                    rs.getInt("Stock")
-                );
+
+                Product p = new Product();
+
+                // setters (DB → object)
+                p.setProductID(rs.getInt("ProductID"));
+                p.setName(rs.getString("Name"));
+                p.setCategory(rs.getString("Category"));
+                p.setPrice(rs.getDouble("Price"));
+                p.setStock(rs.getInt("Stock"));
+
+                list.add(p);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return list;
     }
 
-    // Check stock using function
-    public void checkStock(int pid) {
+    // ✅ Display products
+    public void viewProducts() {
+
+        ArrayList<Product> list = getAllProducts();
+
+        for (Product p : list) {
+            System.out.println(
+                p.getProductID() + " | " +
+                p.getName() + " | Price: " +
+                p.getPrice() + " | Stock: " +
+                p.getStock()
+            );
+        }
+    }
+
+    // ✅ Check stock
+    public int checkStock(int pid) {
+
         try {
             Connection con = DBConnection.getConnection();
 
@@ -39,11 +68,13 @@ public class ProductDAO {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                System.out.println("Stock = " + rs.getInt(1));
+                return rs.getInt(1);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return 0;
     }
 }

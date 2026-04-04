@@ -1,27 +1,33 @@
 package dao;
 
 import db.DBConnection;
+import model.Customer;
 import java.sql.*;
 
 public class CustomerDAO {
 
-    public void addCustomer(int id, String name, String email, String phone, String address) {
-        try {
-            Connection con = DBConnection.getConnection();
-            String query = "INSERT INTO Customer VALUES (?, ?, ?, ?, ?)";
-            PreparedStatement ps = con.prepareStatement(query);
+    public void addCustomer(Customer c) {
 
-            ps.setInt(1, id);
-            ps.setString(2, name);
-            ps.setString(3, email);
-            ps.setString(4, phone);
-            ps.setString(5, address);
+    try {
+        Connection con = DBConnection.getConnection();
 
-            ps.executeUpdate();
-            System.out.println("Customer added successfully");
+        // Using stored procedure
+        PreparedStatement ps =
+            con.prepareStatement("CALL addCustomer(?,?,?,?,?)");
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // Using getters from model
+        ps.setInt(1, c.getCustomerID());
+        ps.setString(2, c.getName());
+        ps.setString(3, c.getEmail());
+        ps.setString(4, c.getPhone());
+        ps.setString(5, c.getAddress());
+
+        ps.execute();
+
+        System.out.println("Customer added successfully!");
+
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+}
 }

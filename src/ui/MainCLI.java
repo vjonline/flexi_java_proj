@@ -3,6 +3,7 @@ package ui;
 import java.util.Scanner;
 import service.*;
 import dao.*;
+import model.Customer;
 
 public class MainCLI {
 
@@ -29,23 +30,26 @@ public class MainCLI {
             switch (ch) {
 
                 case 1:
+                    Customer c = new Customer();
+
                     System.out.print("Enter ID: ");
-                    int id = sc.nextInt();
+                    c.setCustomerID(sc.nextInt());
                     sc.nextLine();
 
                     System.out.print("Name: ");
-                    String name = sc.nextLine();
+                    c.setName(sc.nextLine());
 
                     System.out.print("Email: ");
-                    String email = sc.nextLine();
+                    c.setEmail(sc.nextLine());
 
                     System.out.print("Phone: ");
-                    String phone = sc.nextLine();
+                    c.setPhone(sc.nextLine());
 
                     System.out.print("Address: ");
-                    String address = sc.nextLine();
+                    c.setAddress(sc.nextLine());
 
-                    cs.addCustomer(id, name, email, phone, address);
+                    cs.addCustomer(c); // pass object
+
                     break;
 
                 case 2:
