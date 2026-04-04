@@ -89,6 +89,7 @@ public class MainCLI {
 
                     break;
                 case 6:
+                    sc.close();
                     System.exit(0);
             }
         }
