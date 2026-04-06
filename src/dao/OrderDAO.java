@@ -57,12 +57,19 @@ public class OrderDAO {
 
             ResultSet rs = st.executeQuery("SELECT * FROM Orders");
 
+            System.out.println("\n----------------------------------------------------------");
+            System.out.printf("%-10s %-15s %-15s\n",
+                    "OrderID", "Status", "Total Amount");
+            System.out.println("----------------------------------------------------------");
+
             while (rs.next()) {
-                System.out.println(
-                        rs.getInt("OrderID") + " | " +
-                        rs.getString("Status") + " | " +
+                System.out.printf("%-10d %-15s %-15.2f\n",
+                        rs.getInt("OrderID"),
+                        rs.getString("Status"),
                         rs.getDouble("TotalAmount"));
             }
+
+            System.out.println("----------------------------------------------------------");
 
         } catch (Exception e) {
             e.printStackTrace();

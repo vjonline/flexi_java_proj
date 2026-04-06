@@ -49,14 +49,20 @@ public class ProductDAO implements BaseDAO {
 
         ArrayList<Product> list = getAllProducts();
 
+        System.out.println("\n---------------------------------------------------------------");
+        System.out.printf("%-10s %-20s %-10s %-10s\n",
+                "ID", "Name", "Price", "Stock");
+        System.out.println("---------------------------------------------------------------");
+
         for (Product p : list) {
-            System.out.println(
-                p.getProductID() + " | " +
-                p.getName() + " | Price: " +
-                p.getPrice() + " | Stock: " +
-                p.getStock()
-            );
+            System.out.printf("%-10d %-20s %-10.2f %-10d\n",
+                    p.getProductID(),
+                    p.getName(),
+                    p.getPrice(),
+                    p.getStock());
         }
+
+        System.out.println("---------------------------------------------------------------");
     }
 
     //REQUIRED for interface (polymorphism)

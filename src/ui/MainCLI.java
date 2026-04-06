@@ -126,6 +126,7 @@ public class MainCLI {
 
                 case 7:
                     System.exit(0);
+                    sc.close();
             }
         }
     }
