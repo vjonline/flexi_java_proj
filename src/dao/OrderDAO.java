@@ -11,15 +11,36 @@ public class OrderDAO {
         try {
             Connection con = DBConnection.getConnection();
 
-            // Get product price
-            PreparedStatement ps1 =
-                con.prepareStatement("SELECT Price FROM Product WHERE ProductID=?");
+            // Check Customer exists
+            PreparedStatement checkCust = con.prepareStatement(
+                    "SELECT COUNT(*) FROM Customer WHERE CustomerID = ?");
+            checkCust.setInt(1, cid);
+            ResultSet rc = checkCust.executeQuery();
 
-            ps1.setInt(1, pid);
-            ResultSet rs = ps1.executeQuery();
+            if (rc.next() && rc.getInt(1) == 0) {
+                System.out.println("Customer ID not found!");
+                return;
+            }
 
-            double price = 0;
-            if (rs.next()) price = rs.getDouble(1);
+            // Check Product exists + get price + stock
+            PreparedStatement checkProd = con.prepareStatement(
+                    "SELECT Price, Stock FROM Product WHERE ProductID = ?");
+            checkProd.setInt(1, pid);
+            ResultSet rp = checkProd.executeQuery();
+
+            if (!rp.next()) {
+                System.out.println("Product ID not found!");
+                return;
+            }
+
+            double price = rp.getDouble("Price");
+            int stock = rp.getInt("Stock");
+
+            // Check stock availability
+            if (qty > stock) {
+                System.out.println("Not enough stock available!");
+                return;
+            }
 
             double total = price * qty;
 
@@ -28,24 +49,28 @@ public class OrderDAO {
                     "INSERT INTO Orders VALUES (?, CURDATE(), ?, ?, ?, 101)");
 
             ps2.setInt(1, oid);
-            ps2.setString(2, "Pending"); //default
+            ps2.setString(2, "Pending");
             ps2.setDouble(3, total);
             ps2.setInt(4, cid);
 
+            ps2.executeUpdate();
+
             // Insert into OrderProduct
             PreparedStatement ps3 = con.prepareStatement(
-                "INSERT INTO OrderProduct VALUES (?, ?, ?)"
-            );
+                    "INSERT INTO OrderProduct VALUES (?, ?, ?)");
 
             ps3.setInt(1, oid);
             ps3.setInt(2, pid);
             ps3.setInt(3, qty);
+
             ps3.executeUpdate();
 
             System.out.println("Order placed successfully!");
 
+        } catch (SQLException e) {
+            System.out.println("Database error while placing order!");
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Unexpected error!");
         }
     }
 

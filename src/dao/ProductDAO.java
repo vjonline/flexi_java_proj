@@ -77,25 +77,29 @@ public class ProductDAO implements BaseDAO {
         try {
             Connection con = DBConnection.getConnection();
 
-            PreparedStatement ps =
-                con.prepareStatement("SELECT getProductStock(?)");
+            //check if product exists
+            PreparedStatement check = con.prepareStatement(
+                    "SELECT COUNT(*) FROM Product WHERE ProductID = ?");
+            check.setInt(1, pid);
+            ResultSet rs1 = check.executeQuery();
 
+            if (rs1.next() && rs1.getInt(1) == 0) {
+                System.out.println("Product ID not found!");
+                return -1;
+            }
+
+            PreparedStatement ps = con.prepareStatement("SELECT getProductStock(?)");
             ps.setInt(1, pid);
-
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
                 return rs.getInt(1);
             }
 
-        } 
-        catch (SQLException e) {
-            System.out.println("Database error while checking stock!");
-        } 
-        catch (Exception e) {
-            System.out.println("Unexpected error!");
+        } catch (Exception e) {
+            System.out.println("Error checking stock!");
         }
 
-        return 0;
+        return -1;
     }
 }
