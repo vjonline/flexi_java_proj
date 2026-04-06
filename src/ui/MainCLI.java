@@ -27,7 +27,8 @@ public class MainCLI {
             System.out.println("3. Place Order");
             System.out.println("4. View Orders");
             System.out.println("5. Check Stock");
-            System.out.println("6. Exit");
+            System.out.println("6. Update Order Status");
+            System.out.println("7. Exit");
 
             int ch = sc.nextInt();
 
@@ -113,7 +114,17 @@ public class MainCLI {
 
                     break;
                 case 6:
-                    sc.close();
+                    System.out.print("Enter Order ID: ");
+                    int oid2 = sc.nextInt();
+                    sc.nextLine();
+
+                    System.out.print("Enter Status (Pending/Completed/Cancelled): ");
+                    String status = sc.nextLine();
+
+                    od.updateOrderStatus(oid2, status);
+                    break;
+
+                case 7:
                     System.exit(0);
             }
         }

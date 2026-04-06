@@ -25,13 +25,12 @@ public class OrderDAO {
 
             // Insert into Orders
             PreparedStatement ps2 = con.prepareStatement(
-                "INSERT INTO Orders VALUES (?, CURDATE(), 'Pending', ?, ?, 101)"
-            );
+                    "INSERT INTO Orders VALUES (?, CURDATE(), ?, ?, ?, 101)");
 
             ps2.setInt(1, oid);
-            ps2.setDouble(2, total);
-            ps2.setInt(3, cid);
-            ps2.executeUpdate();
+            ps2.setString(2, "Pending"); //default
+            ps2.setDouble(3, total);
+            ps2.setInt(4, cid);
 
             // Insert into OrderProduct
             PreparedStatement ps3 = con.prepareStatement(
@@ -60,13 +59,37 @@ public class OrderDAO {
 
             while (rs.next()) {
                 System.out.println(
-                    rs.getInt("OrderID") + " | " +
-                    rs.getDouble("TotalAmount")
-                );
+                        rs.getInt("OrderID") + " | " +
+                        rs.getString("Status") + " | " +
+                        rs.getDouble("TotalAmount"));
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    public void updateOrderStatus(int orderId, String status) {
+
+    try {
+        Connection con = DBConnection.getConnection();
+
+        PreparedStatement ps = con.prepareStatement(
+            "UPDATE Orders SET Status = ? WHERE OrderID = ?"
+        );
+
+        ps.setString(1, status);
+        ps.setInt(2, orderId);
+
+        int rows = ps.executeUpdate();
+
+        if (rows > 0)
+            System.out.println("Status updated!");
+        else
+            System.out.println("Order not found!");
+
+    } catch (Exception e) {
+        System.out.println("Error updating status!");
+    }
+}
 }
