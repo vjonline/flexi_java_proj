@@ -23,7 +23,7 @@ public class MainCLI {
 
             System.out.println("\n==== Inventory System ====");
             System.out.println("1. Add Customer");
-            System.out.println("2. View Products (Polymorphism)");
+            System.out.println("2. View Products");
             System.out.println("3. Place Order");
             System.out.println("4. View Orders");
             System.out.println("5. Check Stock");
