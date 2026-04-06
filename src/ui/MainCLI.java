@@ -4,7 +4,7 @@ import java.util.Scanner;
 import service.*;
 import dao.*;
 import model.Customer;
-
+import util.InputValidator;
 public class MainCLI {
 
     public static void main(String[] args) {
@@ -37,17 +37,41 @@ public class MainCLI {
                     Customer c = new Customer();
 
                     System.out.print("Enter ID: ");
-                    c.setId(sc.nextInt());
+                    int id = sc.nextInt();
                     sc.nextLine();
 
+                    if (!InputValidator.isValidID(id)) {
+                        System.out.println("Invalid ID! Must be positive.");
+                        break;
+                    }
+                    c.setId(id);
+
                     System.out.print("Name: ");
-                    c.setName(sc.nextLine());
+                    String name = sc.nextLine();
+
+                    if (!InputValidator.isValidName(name)) {
+                        System.out.println("Invalid Name! No numbers allowed.");
+                        break;
+                    }
+                    c.setName(name);
 
                     System.out.print("Email: ");
-                    c.setEmail(sc.nextLine());
+                    String email = sc.nextLine();
+
+                    if (!InputValidator.isValidEmail(email)) {
+                        System.out.println("Invalid Email! Must contain @");
+                        break;
+                    }
+                    c.setEmail(email);
 
                     System.out.print("Phone: ");
-                    c.setPhone(sc.nextLine());
+                    String phone = sc.nextLine();
+
+                    if (!InputValidator.isValidPhone(phone)) {
+                        System.out.println("Invalid Phone! Must be 10 digits.");
+                        break;
+                    }
+                    c.setPhone(phone);
 
                     System.out.print("Address: ");
                     c.setAddress(sc.nextLine());
